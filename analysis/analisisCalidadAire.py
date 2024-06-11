@@ -2,7 +2,8 @@ import pandas as pd
 from data.generators.generadorCalidadAire import generarDatosCalidadAire
 from helpers.generarTabla import crearTablaHTML
 
-import imgkit
+import matplotlib.pyplot as plt
+
 
 #1. PARA ANALIZAR DATOS CON PYTHON DEBEMOS CONSTRUIR UN DATFRAME
 
@@ -33,16 +34,32 @@ def construirDataFrameCalidadAire():
     #CONSULTAR DATOS ESPECIFICOS
     #filtroICAPositivo=calidadAireDF.query("(ICA>=20) and (ICA<50)")
     #filtroICAModerado=calidadAireDF.query("(ICA>=50) and (ICA<70)")
-    filtroICAPeligroso=calidadAireDF.query("(ICA>=70)").value_counts()
+    #filtroICAPeligroso=calidadAireDF.query("(ICA>=70)").value_counts()
 
     #print(filtroICAPositivo)
     #print("\n")
     #print(filtroICAModerado)
     print("\n")
-    print(filtroICAPeligroso)
+    #print(filtroICAPeligroso)
 
     #probando...
     
     #crearTablaHTML(calidadAireDF,"calidadAire")
+
+    sumatoria=calidadAireDF.groupby("comuna")["ICA"].mean()
+    print(sumatoria)
+
+    # Graficar el promedio de ICA por comuna
+    plt.figure(figsize=(20, 10))
+    promedio_ICA = calidadAireDF.groupby('comuna')['ICA'].mean()
+    promedio_ICA.plot(kind='bar', color='skyblue')
+    plt.title('Promedio del Índice de Calidad del Aire por Comuna')
+    plt.xlabel('Comuna')
+    plt.ylabel('Promedio de ICA')
+    plt.xticks(rotation=45)
+    plt.grid(True)
+    # Guardar la gráfica en un archivo
+    plt.savefig('./assets/img/Promedio_ICA_por_Comuna.png', format='png', dpi=300)
+    
    
 construirDataFrameCalidadAire()
